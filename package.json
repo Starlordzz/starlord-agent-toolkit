@@ -1,0 +1,35 @@
+{
+  "name": "mcp-server-giallozafferano",
+  "version": "0.1.0",
+  "description": "Read-only MCP server for public GialloZafferano content",
+  "type": "module",
+  "bin": {
+    "mcp-server-giallozafferano": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --exclude tests/live/**",
+    "test:watch": "vitest",
+    "test:live": "vitest run tests/live",
+    "start": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cheerio": "^1.2.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
