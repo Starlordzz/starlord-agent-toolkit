@@ -41,6 +41,47 @@ describe("MCP server", () => {
     ]);
   });
 
+  it("exposes server instructions for host guidance", async () => {
+    const { client } = await connected();
+    const instructions = client.getInstructions();
+    expect(instructions).toContain("search_content");
+    expect(instructions).toContain("get_recipe");
+  });
+
+  it("advertises an output schema on every tool", async () => {
+    const { client } = await connected();
+    const result = await client.listTools();
+    for (const tool of result.tools) {
+      expect(tool.outputSchema, `${tool.name} should declare outputSchema`).toBeDefined();
+    }
+  });
+
+  it("lists the workflow prompts", async () => {
+    const { client } = await connected();
+    const result = await client.listPrompts();
+    expect(result.prompts.map((prompt) => prompt.name).sort()).toEqual([
+      "cook_dish", "plan_italian_menu", "recipe_by_ingredients",
+    ]);
+  });
+
+  it("renders cook_dish into a tool-driving user message", async () => {
+    const { client } = await connected();
+    const result = await client.getPrompt({ name: "cook_dish", arguments: { dish: "tiramisu" } });
+    const [message] = result.messages;
+    expect(message.role).toBe("user");
+    const text = (message.content as { type: string; text: string }).text;
+    expect(text).toContain("tiramisu");
+    expect(text).toContain("search_content");
+    expect(text).toContain("get_recipe");
+  });
+
+  it("renders plan_italian_menu without an occasion", async () => {
+    const { client } = await connected();
+    const result = await client.getPrompt({ name: "plan_italian_menu", arguments: {} });
+    const text = (result.messages[0].content as { type: string; text: string }).text;
+    expect(text).toContain("search_content");
+  });
+
   it("returns JSON and structured content", async () => {
     const { client } = await connected();
     const result = await client.callTool({ name: "get_recipe", arguments: { url: recipe.sourceUrl } });

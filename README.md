@@ -30,6 +30,26 @@
 
 详情工具仅接受 `https://giallozafferano.com` 及其子域名的公开 URL。每次重定向都会重新校验域名。
 
+### 面向 Agent 的引导
+
+为了让 AI 客户端在用户表达"我想做某道菜"之类意图时主动、正确地调用工具，服务器额外提供：
+
+- **Server instructions**：初始化时向客户端下发使用说明，描述适用场景和标准流程（`search_content` 搜索 → 取最佳结果的 `sourceUrl` → `get_recipe` 读取完整菜谱）。
+- **意图优先的工具描述与 `title`**：每个工具描述先说明"什么时候用"，再说明返回内容。
+- **输出 Schema（`outputSchema`）**：每个工具声明结构化输出的 JSON Schema，成功结果由 SDK 在服务端校验；错误结果（`isError`）返回 `{ error: { code, message, suggestion } }`，不参与校验。
+
+### 工作流 Prompts（斜杠命令）
+
+服务器注册了三个 MCP prompt，在 Claude Code、Claude Desktop 等客户端中显示为斜杠命令，一步触发完整工作流：
+
+| Prompt | 参数 | 用途 |
+| --- | --- | --- |
+| `cook_dish` 我想做一道菜 | `dish`（必填） | 按菜名搜索并整理出食材 + 分步做法 |
+| `recipe_by_ingredients` 用现有食材找菜谱 | `ingredients`（必填） | 按手头食材找可做的菜并核对缺什么 |
+| `plan_italian_menu` 配一桌意餐 | `occasion`（可选） | 按场景/人数/忌口配前菜—第一道—主菜—甜点菜单 |
+
+例如在 Claude Code 中：`/giallozafferano:cook_dish (MCP) tiramisu`。
+
 ## 环境要求
 
 - Node.js 20 或更高版本
