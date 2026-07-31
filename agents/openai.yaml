@@ -1,0 +1,7 @@
+# Cross-platform interface metadata for agent platforms that read OpenAI-style
+# agent manifests. Claude Code ignores this file (it reads only SKILL.md and
+# references/); keep display text here in sync with SKILL.md's description.
+interface:
+  display_name: "skill_Travel-guide"
+  short_description: "优先用高德和小红书核验路线、本地美食与雨天备选方案"
+  default_prompt: "使用 $skill-travel-guide，并优先调用高德与小红书 MCP，规划一份证据透明的本地旅行攻略。"
