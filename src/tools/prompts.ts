@@ -3,10 +3,16 @@ import { z } from "zod";
 
 /**
  * Named workflow prompts. In hosts like Claude Code / Claude Desktop these show
- * up as slash commands, giving the user a one-step entry point (e.g. "我想做一道菜")
- * that drives the standard search_content → get_recipe flow. Titles and bodies are
- * Chinese and user-facing; the tools they invoke stay English and model-facing.
+ * up as slash commands, giving the user a one-step entry point that drives the
+ * standard search_content → get_recipe flow. Titles and descriptions are
+ * bilingual (English + Chinese) because they are user-facing UI strings; bodies
+ * are English for the model and end with an instruction to answer in the
+ * language of the conversation, so the same prompt serves users of any language.
  */
+
+const RESPOND_IN_USER_LANGUAGE =
+  "Answer in the language I have been using in this conversation. " +
+  "Only use what the tools return — if nothing suitable is found, say so honestly instead of inventing a recipe.";
 
 function userMessage(text: string) {
   return { messages: [{ role: "user" as const, content: { type: "text" as const, text } }] };
@@ -14,41 +20,47 @@ function userMessage(text: string) {
 
 export function registerPrompts(server: McpServer): void {
   server.registerPrompt("cook_dish", {
-    title: "我想做一道菜",
-    description: "输入菜名，自动在 GialloZafferano 上搜索并整理出一份完整菜谱（食材 + 分步做法）。",
-    argsSchema: { dish: z.string().min(1).describe("想做的菜名，例如 tiramisu、lasagne、提拉米苏") },
+    title: "Cook a dish · 我想做一道菜",
+    description:
+      "Search GialloZafferano for a dish and turn the best match into a complete recipe (ingredients + step-by-step instructions). " +
+      "输入菜名，自动搜索并整理出完整菜谱（食材 + 分步做法）。",
+    argsSchema: { dish: z.string().min(1).describe("Dish you want to cook, e.g. tiramisu, lasagne / 想做的菜名，如 提拉米苏") },
   }, ({ dish }) => userMessage(
-    `我想做「${dish}」。请按以下步骤操作：\n` +
-    `1. 用 search_content 工具在 GialloZafferano 上搜索「${dish}」。\n` +
-    `2. 从结果里挑最贴合的一条，对它的 sourceUrl 调用 get_recipe。\n` +
-    `3. 用中文整理并输出：食材清单、分步骤做法、所需时间与份数，并在末尾附上来源链接。\n` +
-    `如果没有搜到合适的结果，请如实说明并给出替代建议，不要编造菜谱。`,
+    `I want to cook "${dish}". Please:\n` +
+    `1. Use the search_content tool to search GialloZafferano for "${dish}" — if the name is not in Italian or English, translate it first (e.g. 提拉米苏 → tiramisu).\n` +
+    `2. Pick the best match and call get_recipe with its sourceUrl.\n` +
+    `3. Present the ingredient list, step-by-step instructions, prep/cook time, and servings, ending with the source URL.\n` +
+    `If no good match exists, suggest close alternatives from the search results. ${RESPOND_IN_USER_LANGUAGE}`,
   ));
 
   server.registerPrompt("recipe_by_ingredients", {
-    title: "用现有食材找菜谱",
-    description: "输入手头已有的食材，找出可以做的 GialloZafferano 菜谱。",
-    argsSchema: { ingredients: z.string().min(1).describe("现有食材，用逗号分隔，例如 zucchine, uova, parmigiano") },
+    title: "Recipes from my ingredients · 用现有食材找菜谱",
+    description:
+      "Find GialloZafferano recipes you can make with the ingredients you already have, and see what is still missing. " +
+      "输入手头食材，找出能做的菜并核对还缺什么。",
+    argsSchema: { ingredients: z.string().min(1).describe("Ingredients you have, comma-separated, e.g. zucchine, uova, parmigiano / 现有食材，逗号分隔") },
   }, ({ ingredients }) => userMessage(
-    `我手头有这些食材：${ingredients}。请按以下步骤操作：\n` +
-    `1. 用 search_content 工具在 GialloZafferano 上按这些食材（可分别或组合）搜索候选菜谱。\n` +
-    `2. 挑 2-3 个最合适的，对每个的 sourceUrl 调用 get_recipe，核对实际所需食材。\n` +
-    `3. 用中文推荐优先做哪几道、分别还缺什么食材，并附上每道菜的来源链接。\n` +
-    `只依据工具返回的内容作答，不要编造菜谱。`,
+    `I have these ingredients: ${ingredients}. Please:\n` +
+    `1. Use the search_content tool to find candidate GialloZafferano recipes for these ingredients, searched individually or combined — translate them into Italian or English first if needed.\n` +
+    `2. Pick the 2-3 best fits and call get_recipe with each one's sourceUrl to check the full ingredient list.\n` +
+    `3. Recommend which dishes to make first, list what I am still missing for each, and include each recipe's source URL.\n` +
+    RESPOND_IN_USER_LANGUAGE,
   ));
 
   server.registerPrompt("plan_italian_menu", {
-    title: "配一桌意餐",
-    description: "根据场景、人数或忌口，配一份前菜—第一道—主菜—甜点的意大利菜单并给出菜谱。",
-    argsSchema: { occasion: z.string().optional().describe("场景、人数或忌口，例如「4 人素食晚餐」「快手工作日午餐」，可留空") },
+    title: "Plan an Italian menu · 配一桌意餐",
+    description:
+      "Plan a full Italian menu (antipasto / primo / secondo / dolce) for an occasion, with a real recipe behind every course. " +
+      "按场景、人数或忌口配一桌前菜—第一道—主菜—甜点的意餐菜单。",
+    argsSchema: { occasion: z.string().optional().describe("Occasion, headcount, or dietary needs, e.g. 'vegetarian dinner for 4' / 场景、人数或忌口，如「4 人素食晚餐」，可留空") },
   }, ({ occasion }) => {
-    const requirement = occasion?.trim() || "没有特别要求，家常即可";
+    const requirement = occasion?.trim() || "no special requirements — everyday home cooking is fine";
     return userMessage(
-      `帮我配一桌意大利菜单（antipasto 前菜 / primo 第一道 / secondo 主菜 / dolce 甜点，每类 1-2 道）。要求：${requirement}。请按以下步骤操作：\n` +
-      `1. 用 search_content 逐类搜索候选菜（如 antipasti、primi、secondi、dolci 或具体菜名）。\n` +
-      `2. 对每道入选的菜，用 get_recipe 拿到食材与做法。\n` +
-      `3. 用中文输出完整菜单、每道菜的来源链接，以及一份合并后的采购清单。\n` +
-      `只依据工具返回的内容作答，不要编造菜谱。`,
+      `Help me plan an Italian menu (antipasto / primo / secondo / dolce, 1-2 dishes per course). Requirements: ${requirement}. Please:\n` +
+      `1. Use search_content to find candidates for each course (e.g. antipasti, primi, secondi, dolci, or specific dish names).\n` +
+      `2. Call get_recipe with each chosen dish's sourceUrl to get its ingredients and steps.\n` +
+      `3. Present the full menu with each dish's source URL, plus one combined shopping list.\n` +
+      RESPOND_IN_USER_LANGUAGE,
     );
   });
 }

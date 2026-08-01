@@ -1,75 +1,79 @@
-# AI 生成与风险披露
+# AI Generation & Risk Disclosure
 
-## 1. 创作方式
+**English** | [简体中文](./AI-DISCLOSURE.zh-CN.md)
 
-本项目的初始架构、源代码、测试、构建配置、MCP 工具定义和文档主要由 AI 编码代理根据项目维护者提供的自然语言需求生成。维护者参与了需求确认、方案选择、工具授权、测试执行、故障排查和部分输出审查。
+> This document is provided in English and Chinese. The two versions are intended to match; if they diverge, the [Chinese version](./AI-DISCLOSURE.zh-CN.md) prevails. The formal terms of the LICENSE take precedence over either language version of this disclosure.
 
-“经过人工参与”不等于“经过完整人工编写或逐行审计”。除非另有明确记录，本仓库中的任何文件都可能包含由生成式人工智能直接创建或修改的内容。
+## 1. How This Project Was Created
 
-## 2. AI 生成内容的固有局限
+The initial architecture, source code, tests, build configuration, MCP tool definitions, and documentation of this project were generated primarily by AI coding agents from natural-language requirements provided by the maintainer. The maintainer took part in requirement confirmation, design selection, tool authorization, test execution, troubleshooting, and partial review of the output.
 
-生成式人工智能可能产生但不限于以下问题：
+"Human involvement" does not mean "fully human-written or line-by-line audited". Unless explicitly recorded otherwise, any file in this repository may contain content created or modified directly by generative AI.
 
-- 语法正确但逻辑错误的实现；
-- 未覆盖的边界条件、并发问题、资源泄漏或安全缺陷；
-- 对第三方网页结构、协议、API 或法律要求的不准确理解；
-- 已过时、虚构、不完整或相互矛盾的信息；
-- 与依赖版本、运行环境或未来网站变更不兼容的代码；
-- 无意中生成与现有作品相似的表达或实现；
-- 测试覆盖不足，或测试与真实使用场景不一致。
+## 2. Inherent Limitations of AI-Generated Content
 
-因此，仓库可运行、测试通过或示例成功，都不应被解释为对质量、安全、合法性或适用性的保证。
+Generative AI can produce problems including, but not limited to:
 
-## 3. 人工审查和测试边界
+- implementations that are syntactically correct but logically wrong;
+- uncovered edge cases, concurrency issues, resource leaks, or security flaws;
+- inaccurate understanding of third-party page structures, protocols, APIs, or legal requirements;
+- outdated, fabricated, incomplete, or mutually contradictory information;
+- code incompatible with dependency versions, runtime environments, or future site changes;
+- unintentionally generated expression or implementations similar to existing works;
+- insufficient test coverage, or tests that do not match real-world usage.
 
-项目在生成过程中执行了 TypeScript 构建、离线自动化测试和有限的真实网站冒烟测试。这些验证只覆盖执行时的特定代码版本、依赖版本、网页样本和网络环境。
+Therefore, the fact that the repository runs, tests pass, or examples succeed must not be interpreted as a guarantee of quality, security, legality, or fitness for purpose.
 
-项目没有声称已经完成以下工作：
+## 3. Boundaries of Human Review and Testing
 
-- 独立的专业安全审计或渗透测试；
-- 对每一行代码的人工审查；
-- 对所有 GialloZafferano 页面类型和历史页面的兼容性测试；
-- 法律、版权、商标、隐私、数据保护或网站条款的专业审查；
-- 食品安全、过敏原、营养或医疗信息的专业验证；
-- 对所有操作系统、MCP 客户端和 Node.js 版本的测试。
+During development, the project ran TypeScript builds, offline automated tests, and limited live smoke tests against the real website. These checks only cover the specific code version, dependency versions, page samples, and network environment present at the time they ran.
 
-## 4. 使用者的验证责任
+The project does **not** claim to have completed any of the following:
 
-在使用、修改、部署、公开提供或分发本项目之前，使用者应自行：
+- an independent professional security audit or penetration test;
+- human review of every line of code;
+- compatibility testing against all GialloZafferano page types and historical pages;
+- professional review of legal, copyright, trademark, privacy, data-protection, or site-terms matters;
+- professional verification of food-safety, allergen, nutrition, or medical information;
+- testing across all operating systems, MCP clients, and Node.js versions.
 
-- 阅读并理解源代码、依赖和配置；
-- 运行测试并针对实际用途补充测试；
-- 进行安全、隐私和合规审查；
-- 核对目标网站的使用条款、robots 规则和访问限制；
-- 检查第三方内容、商标和版权许可；
-- 阅读并遵守 AGPLv3，包括适用于修改、分发和远程网络交互的源码提供义务；
-- 对菜谱、过敏原、营养、份量、时间和食品安全信息进行独立核验；
-- 为生产或重要环境设置监控、限流、故障恢复和人工复核机制。
+## 4. The User's Verification Responsibilities
 
-## 5. 无专业建议
+Before using, modifying, deploying, publicly offering, or distributing this project, users should independently:
 
-本项目及其输出不构成法律、合规、安全、隐私、营养、医疗、食品安全或其他专业建议。项目维护者和 AI 系统均不是使用者的律师、审计师、医生、营养师或安全顾问。
+- read and understand the source code, dependencies, and configuration;
+- run the tests and add tests for their actual use case;
+- perform security, privacy, and compliance reviews;
+- check the target site's terms of use, robots rules, and access restrictions;
+- check third-party content, trademark, and copyright permissions;
+- read and comply with the AGPLv3, including the source-offer obligations that apply to modification, distribution, and remote network interaction;
+- independently verify recipes, allergens, nutrition, servings, times, and food-safety information;
+- set up monitoring, rate limiting, failure recovery, and human review for production or otherwise important environments.
 
-## 6. 无官方关系或背书
+## 5. No Professional Advice
 
-本项目不是 GialloZafferano 官方产品。项目维护者与 GialloZafferano、其所有者、关联方、员工、作者或内容创作者不存在隶属、合作、授权、赞助或背书关系。项目名称仅用于说明兼容或目标数据来源。
+This project and its output do not constitute legal, compliance, security, privacy, nutrition, medical, food-safety, or other professional advice. Neither the maintainer nor any AI system is the user's lawyer, auditor, doctor, dietitian, or security consultant.
 
-GialloZafferano 的名称、商标、页面、图片、视频、菜谱、文章和其他内容归其各自权利人所有。本仓库许可证不授予任何第三方内容或商标权利。
+## 6. No Official Relationship or Endorsement
 
-## 7. 数据和运行风险
+This project is not an official GialloZafferano product. The maintainer has no affiliation, partnership, authorization, sponsorship, or endorsement relationship with GialloZafferano, its owners, affiliates, employees, authors, or content creators. The project name is used only to describe compatibility and the targeted data source.
 
-第三方网站可能随时修改结构、内容、URL、访问策略或技术保护措施。本项目可能因此返回空结果、错误字段、过时数据或解析失败，也可能触发第三方限流或访问限制。
+GialloZafferano's name, trademarks, pages, images, videos, recipes, articles, and other content belong to their respective rights holders. This repository's license grants no rights to any third-party content or trademarks.
 
-使用者不得依赖本项目绕过验证码、登录、访问控制、付费墙、限流或其他技术保护措施。因使用者的部署方式、请求规模或数据处理行为产生的责任由使用者承担。
+## 7. Data and Operational Risks
 
-## 8. 无保证和责任限制
+Third-party websites may change their structure, content, URLs, access policies, or technical protection measures at any time. As a result, this project may return empty results, wrong fields, outdated data, or parse failures, and may trigger third-party rate limiting or access restrictions.
 
-本项目按现状提供，不提供任何明示或默示保证，包括但不限于正确性、完整性、可用性、安全性、持续兼容性、适销性、不侵权性或适合特定用途的保证。
+Users must not rely on this project to bypass CAPTCHAs, logins, access controls, paywalls, rate limits, or other technical protection measures. Liability arising from a user's deployment style, request volume, or data handling rests with that user.
 
-在适用法律允许的最大范围内，维护者不对因本项目或其输出引起的任何直接、间接、附带、特殊、惩罚性或后果性损害承担责任，包括数据损失、利润损失、业务中断、账号或 IP 限制、第三方索赔、合规处罚、食品或健康损害。
+## 8. No Warranty and Limitation of Liability
 
-LICENSE 中的正式许可和责任条款优先于本披露文件。本文件用于提高透明度，不替代适用法律，也不构成法律意见。
+This project is provided as-is, without any express or implied warranty, including but not limited to warranties of correctness, completeness, availability, security, continued compatibility, merchantability, non-infringement, or fitness for a particular purpose.
 
-## 9. 报告问题
+To the maximum extent permitted by applicable law, the maintainer is not liable for any direct, indirect, incidental, special, punitive, or consequential damages arising from this project or its output, including data loss, lost profits, business interruption, account or IP restrictions, third-party claims, compliance penalties, or food or health harm.
 
-发现安全、版权、商标、隐私、数据准确性或其他问题时，请通过 GitHub Issue 联系维护者。公开报告安全问题前，请避免披露可被直接利用的敏感细节。
+The formal license and liability terms in the LICENSE take precedence over this disclosure document. This document exists to improve transparency; it does not replace applicable law and is not legal advice.
+
+## 9. Reporting Issues
+
+If you find a security, copyright, trademark, privacy, data-accuracy, or other issue, contact the maintainer via a GitHub Issue. Before reporting a security issue publicly, avoid disclosing sensitive details that could be directly exploited.

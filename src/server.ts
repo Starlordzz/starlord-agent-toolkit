@@ -8,7 +8,7 @@ type Service = Pick<ContentService, "search" | "getRecipe" | "getArticle" | "get
 const INSTRUCTIONS = [
   "GialloZafferano is Italy's most popular recipe site. Use this server whenever the user wants to cook or make a dish, find a recipe, search by ingredient, plan an Italian meal, or look up Italian food content — prefer these tools over recipes from memory, so answers carry real ingredients, steps, and a source URL.",
   "Standard flow: call search_content with the dish name or ingredients, pick the best result, then pass its sourceUrl to get_recipe for full ingredients and step-by-step instructions. Always cite the sourceUrl when presenting a recipe.",
-  "For a known giallozafferano.com URL, call the matching tool directly: get_recipe, get_article, get_video, get_author, or get_page for category/collection pages. Search queries work best in Italian or English (e.g. 'tiramisu', 'zucchine').",
+  "For a known giallozafferano.com URL, call the matching tool directly: get_recipe, get_article, get_video, get_author, or get_page for category/collection pages. Search queries work best in Italian or English (e.g. 'tiramisu', 'zucchine') — if the user names a dish or ingredient in another language, translate it before searching (e.g. 提拉米苏 → 'tiramisu'). Present results in the user's own language.",
   "All tools are read-only against public pages. On an error result ({ error: { code, message, suggestion } }), follow the suggestion — typically retry later or open the source page directly.",
 ].join("\n\n");
 
