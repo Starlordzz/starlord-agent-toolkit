@@ -8,15 +8,36 @@ Use the strongest available source for each claim:
 
 | Claim | Preferred source | Supporting source | Do not rely on alone |
 |---|---|---|---|
-| Opening, closure, ticket, reservation | attraction, museum, government, or official account | official ticket platform | old blogs or map snippets |
+| Opening, closure, ticket, reservation | attraction, museum, government, or official account, **read in-browser via Playwright MCP** | official ticket platform | old blogs or map snippets |
 | Weather and warnings | meteorological authority or current forecast service | Amap weather or a second forecast | climate averages |
 | Route, distance, mode comparison | Amap MCP or another current map planner | operator route page | straight-line distance |
-| Scenic shuttle or direct bus | operator, official tourism platform, station notice | recent map or local report | an undated travel note |
+| Scenic shuttle or direct bus | operator, official tourism platform, station notice, **read in-browser** | recent map or local report | an undated travel note |
 | Rail or flight | operator, 12306, airline, or airport | current aggregator | cached search snippets |
 | Restaurant address and hours | business official channel plus current map/listing | phone or recent platform status | an old listicle |
 | Cultural significance | heritage authority, museum, or scholarly institution | reputable editorial source | influencer caption |
 
 For conflicting sources, show the conflict and follow the more authoritative, more recent source. A map listing can confirm where a venue is; it cannot overrule an official closure notice.
+
+## Preferred Browser Tool
+
+**Playwright MCP is the recommended way to verify official facts on any trip, in any country.** Search results locate a page; the browser reads it. Use Playwright MCP to:
+
+- open official attraction, museum, park, and government pages and read the live hours, closed weekdays, seasonal schedule, and last-entry rule;
+- read reservation and ticket pages, including rules rendered by JavaScript that snippets truncate or miss;
+- check announcement/notice sections for temporary closure, maintenance, and safety notices;
+- read operator pages for scenic shuttles, ferries, cable cars, and direct buses whose timetables rarely appear correctly in snippets;
+- capture the exact wording and the access date of a decisive claim;
+- take screenshots in the optional website branch (see `optional-website.md`).
+
+Rules of use:
+
+- Read the page before quoting it. Do not assert what an unread page says.
+- Record the URL and the access date for every fact taken this way.
+- If a page requires login, CAPTCHA, or an app, stop; do not attempt to bypass access controls. Note the limitation and fall back to phone confirmation or a secondary source.
+- Respect the site: read the pages needed for this trip, not bulk crawls.
+- Prefer official domains. Reading a content farm in a browser does not upgrade its evidence value.
+
+If Playwright MCP is unavailable, tell the user it is strongly recommended and name what is lost (live hours, JS-rendered reservation rules, notice boards). Offer the platform-supported installation path — in Claude Code, `claude mcp add playwright npx @playwright/mcp@latest`, then check `/mcp`; on other platforms, follow that platform's MCP configuration. Then continue with fetch/search results and label the affected facts `待核实` or `出发前复核` rather than presenting them as verified.
 
 ## Preferred MCP Gate For Mainland China
 
@@ -25,7 +46,7 @@ Strongly recommend installing Amap MCP and Xiaohongshu MCP before a China itiner
 - Use **Amap MCP** for exact POI resolution, branch addresses, route planning, transit/walking/driving comparisons, weather, surrounding search, and geographic feasibility.
 - Use **Xiaohongshu MCP** for food discovery, local dish vocabulary, neighborhood small-shop leads, recent queue conditions, branch-change warnings, tourist-trap avoidance, and negative experience patterns.
 
-Use both when installed. Their outputs complement rather than replace official sources: Amap answers "where and how to get there"; Xiaohongshu supplies discovery and recent lived-experience signals; official sources settle openings, closures, tickets, warnings, and policy.
+Use all three when installed. Their outputs complement rather than replace each other: Amap answers "where and how to get there"; Xiaohongshu supplies discovery and recent lived-experience signals; Playwright reads the official page that settles openings, closures, tickets, warnings, and policy.
 
 If either MCP is absent:
 
@@ -37,10 +58,10 @@ If either MCP is absent:
 ## Research Sequence
 
 1. Resolve exact place names and districts. Disambiguate duplicate POIs.
-2. Verify official hours, closed weekdays, seasonal rules, reservations, last entry, temporary closures, and safety notices.
+2. Verify official hours, closed weekdays, seasonal rules, reservations, last entry, temporary closures, and safety notices — open the official page with Playwright MCP and read it, rather than trusting a search snippet.
 3. Check the forecast for each exact travel date and record the forecast issue/access date.
 4. Query routes between actual anchors: arrival point, lodging, sights, dining areas, and departure point.
-5. Check tourist shuttles and direct services separately from ordinary public transit.
+5. Check tourist shuttles and direct services separately from ordinary public transit; read the operator's timetable page directly.
 6. Research food with the separate evidence procedure.
 7. Re-check dependencies after drafting: a changed attraction must also update meals, routes, and Plan B.
 
@@ -91,6 +112,8 @@ Do not expose a long research dump by default. Surface citations next to high-im
 ## Failure Handling
 
 - If search results are inaccessible, do not infer their content from snippets beyond what the snippet actually states.
+- If Playwright MCP is unavailable, recommend installation and label official-page facts by what the fallback source actually supports; do not describe a page you did not read.
+- If a page is blocked by login, CAPTCHA, region lock, or an app-only flow, stop and record the block. Do not attempt to bypass it. Fall back to a phone check or a secondary source and lower confidence.
 - If Xiaohongshu MCP is unavailable, recommend installation and label social-discovery coverage as incomplete rather than reconstructing posts from snippets.
 - If a source lacks a date, lower confidence and seek a second source.
 - If official and platform hours differ, call or mark `出发前复核`; do not pick whichever fits the plan.

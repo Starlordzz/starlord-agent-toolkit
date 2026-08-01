@@ -73,12 +73,12 @@ Keep the interface dense enough for repeated reference outdoors. Make emergency 
 
 ## Visual Verification
 
-Before delivery:
+Use Playwright MCP for this step; if it is unavailable, say the site was not visually verified rather than implying it was. Before delivery:
 
 1. Run the content/unit tests.
 2. Start the local server.
-3. Check at least a 390 x 844 mobile viewport and one desktop viewport with Playwright screenshots.
+3. Open the site in the browser and check at least a 390 x 844 mobile viewport and one desktop viewport with Playwright screenshots.
 4. Verify no overlap, clipped text, horizontal overflow, blank image, broken link, or unusable tap target.
-5. Exercise day filters, checklists, map links, print view, and health endpoints.
+5. Exercise day filters, checklists, map links, print view, and health endpoints by driving the page, not by reading the source.
 6. Inspect the final ZIP contents and run the deployment command in a clean temporary directory when feasible.
 

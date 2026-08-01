@@ -36,7 +36,7 @@ Search in the destination's language and at district level. Useful Chinese queri
 - `<店名> 排队 避雷`
 - `<店名> 搬迁 闭店 分店`
 
-Use official/business channels and maps for operational facts. Use Meituan, Dianping, Xiaohongshu, local forums, local media, and short-video platforms as review/discovery evidence when accessible. Check recent negative reviews for closure, hygiene, forced packages, seafood pricing, inconsistent branches, and queue manipulation.
+Use official/business channels and maps for operational facts. Where a venue has an official page, account, or booking listing, open it with Playwright MCP and read the current hours, rest days, and reservation rule instead of quoting an old listicle. Use Meituan, Dianping, Xiaohongshu, local forums, local media, and short-video platforms as review/discovery evidence when accessible. Check recent negative reviews for closure, hygiene, forced packages, seafood pricing, inconsistent branches, and queue manipulation.
 
 For a mainland-China trip, follow the MCP availability and fallback rules in `research-method.md`. Use Xiaohongshu MCP for dish vocabulary, community-shop leads, recent queues, branch changes, and avoidance reports, then use Amap MCP to resolve the exact branch, route fit, and nearby backups. Treat all Xiaohongshu results as one source family and cross-check them with business facts and at least one independent evidence type before claiming local endorsement.
 
@@ -57,7 +57,7 @@ Record every named candidate in this form:
 | Price | Range with source and check date, or `待核实` |
 | Queue risk | likely peak and explicit cutoff |
 | Evidence | source types and what each supports |
-| MCP trace | which Amap/Xiaohongshu queries informed the choice, or why either MCP was unavailable |
+| MCP trace | which Playwright/Amap/Xiaohongshu queries informed the choice, or why a tool was unavailable |
 | Verified | absolute date |
 | Caveat | branch, seasonal dish, sell-out, allergy, hygiene, or pricing issue |
 

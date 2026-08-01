@@ -63,9 +63,35 @@ skill-travel-guide/
 
    > 处理旅行规划类请求时，先阅读 `docs/skills/skill-travel-guide/SKILL.md` 并遵循其中流程与引用文件。
 
+## 怎样让它更容易被自动触发
+
+Skill 的自动触发靠 SKILL.md 里 `description` 与用户措辞的匹配。以下说法均已覆盖：
+
+- "帮我规划上海三天两晚"、"周末去哪玩"、"这几个景点怎么串才顺路"
+- "本地人吃什么，别推网红店"、"下雨了行程怎么改"
+- "把这份攻略做成手机网页"
+
+只给一个目的地也能开始，Skill 会先带着标注过的假设往下走，而不是先甩一串问题。若某句话没触发，直接用 `/skill-travel-guide` 显式调用，或把该说法补进 SKILL.md `description` 的中文触发场景列表。
+
+## 推荐依赖：Playwright MCP（所有行程）
+
+**强烈建议安装 Playwright MCP。** 开放时间、闭馆日、预约规则、临时公告、景区接驳班次这类决定行程成败的信息，搜索摘要经常过期或截断；本 Skill 会用 Playwright 直接打开官网读取，并记录 URL 与访问日期。可选网站分支的移动端/桌面端截图验证也依赖它。
+
+Claude Code 安装：
+
+```bash
+claude mcp add playwright npx @playwright/mcp@latest
+```
+
+装好后用 `/mcp` 确认。其他平台按各自的 MCP 配置方式添加。未安装时 Skill 会提示安装、说明缺失了哪类证据，并把受影响的事实标为 `待核实` / `出发前复核`，不会伪造"已读官网"。
+
+遇到需要登录、验证码或仅限 App 的页面，Skill 会停下并记录该限制，不会尝试绕过访问控制。
+
 ## 可选依赖（中国大陆行程）
 
-强烈建议安装 **高德地图 MCP** 与 **小红书 MCP**（安装方式随平台不同，见 `references/research-method.md` 的 Preferred MCP Gate）。缺失时 Skill 会提示安装并降级到公开信源，不会伪造调用结果。
+强烈建议同时安装 **高德地图 MCP** 与 **小红书 MCP**（安装方式随平台不同，见 `references/research-method.md` 的 Preferred MCP Gate）。缺失时 Skill 会提示安装并降级到公开信源，不会伪造调用结果。
+
+三者分工：Playwright 读官网定"开不开、要不要约"，高德算"在哪、怎么去"，小红书提供"本地人在吃什么、哪家在避雷"。
 
 ## 平台兼容注意事项
 

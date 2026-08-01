@@ -1,6 +1,6 @@
 ---
 name: skill-travel-guide
-description: Use when planning a leisure trip, city break, scenic-area visit, food-focused itinerary, multi-day route, weather backup, or an optional packaged mobile travel-guide website for a specific destination. 中文触发场景：旅行攻略、行程规划、citywalk、景区路线、多日游、本地美食推荐、雨天备选方案、旅游网站打包。
+description: Evidence-based trip planner. Researches current opening hours, routes, weather, and local-food evidence, then writes a day-by-day itinerary with Plan B triggers and a source list; optionally packages a mobile guide website. Use when the user asks to plan a trip or itinerary, order attractions into a sensible route, find where locals actually eat, prepare a rain or closure backup, or turn a plan into a shareable page. Prefers Playwright MCP for reading official pages, plus Amap and Xiaohongshu MCP for mainland China. 中文触发场景：旅行攻略、行程规划、去哪玩、几天怎么安排、路线规划、景点顺路、citywalk、一日游、两天一夜、多日游、自驾游、亲子游、周边游、景区路线、本地人吃什么、本地美食、探店避雷、雨天备选方案、行程单、旅游攻略网站打包。
 ---
 
 # skill_Travel-guide
@@ -8,6 +8,24 @@ description: Use when planning a leisure trip, city break, scenic-area visit, fo
 ## Overview
 
 Build an executable trip from current evidence, route geometry, traveler constraints, and explicit priorities. Treat a claim as "locals recommend it" only when independent evidence supports that wording; popularity alone is not local endorsement.
+
+## When To Use
+
+Trigger on requests such as "帮我规划成都三天怎么玩"、"周末想去附近城市，路线怎么安排"、"这几个景点怎么串才顺路"、"当地人吃什么，别给我网红店"、"下雨了行程怎么改"、"把这份攻略做成手机网页", and their English equivalents: plan a trip, build an itinerary, day trip, weekend break, road trip, what to see in N days, where locals eat, rainy-day backup, package a travel-guide site.
+
+Do not trigger for visa or immigration policy, executing flight/hotel bookings, expense reporting, relocation and long-stay logistics, or encyclopedia questions about a place with no trip attached.
+
+Minimum input to start is a destination. Infer dates, pace, party, and budget as clearly labeled assumptions and refine them later; do not open with a questionnaire.
+
+## 0. Tool Preflight
+
+Inspect the available tools by capability before researching, then state in one line which are present and which are missing:
+
+- **Playwright MCP** — recommended for every trip. Open and read the pages that decide the plan: official attraction hours and closure notices, reservation and ticket rules, shuttle timetables, and JS-rendered sites that search snippets cannot resolve. Also used for screenshot verification in the optional website branch.
+- **Amap MCP / 高德地图 MCP** — mainland China: POI resolution, routing, mode comparison, weather, surrounding search.
+- **Xiaohongshu MCP / 小红书 MCP** — mainland China: food discovery, community-shop leads, recent queue and 避雷 signals.
+
+If one is missing, recommend installing it, name the specific evidence lost, and continue on labeled weaker sources. Never claim an unavailable tool was used.
 
 ## Non-negotiable Rules
 
@@ -37,7 +55,9 @@ Convert relative dates such as "tomorrow" into absolute local dates. Detect impo
 
 ## 2. Research Current Facts
 
-Read [references/research-method.md](references/research-method.md) before using web search, map tools, weather tools, or route planners.
+Read [references/research-method.md](references/research-method.md) before using web search, browser automation, map tools, weather tools, or route planners.
+
+Prefer **Playwright MCP** for any fact that lives on an official page: hours, closed weekdays, seasonal rules, reservation windows, last entry, temporary closures, safety notices, and shuttle timetables. Search snippets are a way to find the page, not a substitute for reading it. When Playwright MCP is unavailable, say so, use plain fetch/search, and lower the confidence label on facts that could not be read at source.
 
 For mainland China, follow the "Preferred MCP Gate" in that reference: use Amap MCP and Xiaohongshu MCP when available; if either is missing, recommend installation and disclose the weaker evidence before falling back.
 
@@ -115,6 +135,7 @@ Before delivering, verify every item:
 - Arrival and departure buffers are feasible.
 - Route order follows geography and accepted transport modes.
 - Dynamic claims have a source type and verification date.
+- High-impact official facts (hours, closure, reservation, shuttle) were read at source with Playwright MCP, or their weaker sourcing is disclosed.
 - Amap MCP and Xiaohongshu MCP were used for a mainland-China trip when available; otherwise their absence, installation recommendation, and fallback were disclosed.
 - Restaurant set includes small-local and established-formal categories, or explains why one category lacks credible evidence.
 - Every named restaurant has route fit, signature dishes, queue risk, evidence basis, and a backup at the meal-slot level.
