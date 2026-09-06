@@ -1,6 +1,25 @@
 # Multi-UIAutomator2 (Automation Service & SDK)
 
-> **按需启动、无常驻后台、多语言共享（Python / Dart 等）、带 AI 视觉与语义理解的 Android UI 自动化服务**
+> **按需启动、无常驻后台、多语言共享（Python / Dart / MCP）、带 AI 视觉与语义理解的 Android UI 自动化服务**
+
+---
+
+## 🤖 MCP Server（AI 客户端直连安卓设备）
+
+本项目内置 MCP Server（`mcp_server/`），把全部自动化能力（观察 / 点按 / 输入 / 截图 / SoM 视觉标注 / AI 自愈）暴露为 24 个 MCP 工具，可在 ZCode、Claude Desktop、Cursor 等 AI 客户端中直接操控安卓设备：
+
+```json
+{
+  "mcpServers": {
+    "android-device": {
+      "command": "uv",
+      "args": ["--directory", "/path/to/multi_uiautomator2", "run", "mcp-server-android"]
+    }
+  }
+}
+```
+
+安装与配置详见 [mcp_server/README.md](mcp_server/README.md)。
 
 ---
 
@@ -67,6 +86,9 @@ multi_uiautomator2/
 │   │   ├── agent.py          # 界面理解、多步目标执行与自愈调试
 │   │   └── llm_provider.py   # OpenAI / Gemini / 本地大模型统一接口
 │   └── routes/               # API 路由 (/device, /app, /ui, /ai)
+├── mcp_server/               # MCP Server (AI 客户端 stdio 接入, 24 个工具)
+│   ├── server.py
+│   └── README.md
 ├── sdk/
 │   ├── python/               # Python SDK
 │   │   ├── automation_client/

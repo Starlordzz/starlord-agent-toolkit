@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+
+# Dart / Flutter
+.dart_tool/
+*.lock.tmp
+
+# Env / secrets
+.env
+.env.local
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Screenshots from ad-hoc testing
+*.png.tmp

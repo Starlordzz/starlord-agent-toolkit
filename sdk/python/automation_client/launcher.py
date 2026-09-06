@@ -15,6 +15,20 @@ logger = logging.getLogger("automation.launcher")
 
 class ServerLauncher:
     @staticmethod
+    def _find_project_root() -> str:
+        """Walk up from this file to find the directory containing server/app.py."""
+        d = os.path.dirname(os.path.abspath(__file__))
+        for _ in range(6):
+            if os.path.isfile(os.path.join(d, "server", "app.py")):
+                return d
+            parent = os.path.dirname(d)
+            if parent == d:
+                break
+            d = parent
+        # Fallback: assume the server package is importable from the cwd
+        return os.getcwd()
+
+    @staticmethod
     def is_server_alive(base_url: str, timeout: float = 1.0) -> bool:
         """Check if server /health endpoint is responding."""
         try:
@@ -61,9 +75,10 @@ class ServerLauncher:
             "stdin": subprocess.DEVNULL,
         }
 
-        # Locate root directory containing server module if needed
-        curr_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.abspath(os.path.join(curr_dir, "..", ".."))
+        # Locate the project root (directory containing the server package) by
+        # walking up from this file, so auto-launch works both from a repo
+        # checkout (sdk/python/automation_client) and from an installed copy.
+        project_root = ServerLauncher._find_project_root()
 
         env = os.environ.copy()
         python_path = env.get("PYTHONPATH", "")
