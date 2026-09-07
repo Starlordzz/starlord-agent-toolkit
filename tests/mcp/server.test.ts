@@ -37,14 +37,14 @@ describe("MCP server", () => {
     const { client } = await connected();
     const result = await client.listTools();
     expect(result.tools.map((tool) => tool.name).sort()).toEqual([
-      "get_article", "get_author", "get_page", "get_recipe", "get_video", "search_content",
+      "get_article", "get_author", "get_page", "get_recipe", "get_video", "search_recipes",
     ]);
   });
 
   it("exposes server instructions for host guidance", async () => {
     const { client } = await connected();
     const instructions = client.getInstructions();
-    expect(instructions).toContain("search_content");
+    expect(instructions).toContain("search_recipes");
     expect(instructions).toContain("get_recipe");
   });
 
@@ -71,7 +71,7 @@ describe("MCP server", () => {
     expect(message.role).toBe("user");
     const text = (message.content as { type: string; text: string }).text;
     expect(text).toContain("tiramisu");
-    expect(text).toContain("search_content");
+    expect(text).toContain("search_recipes");
     expect(text).toContain("get_recipe");
   });
 
@@ -79,7 +79,7 @@ describe("MCP server", () => {
     const { client } = await connected();
     const result = await client.getPrompt({ name: "plan_italian_menu", arguments: {} });
     const text = (result.messages[0].content as { type: string; text: string }).text;
-    expect(text).toContain("search_content");
+    expect(text).toContain("search_recipes");
   });
 
   it("returns JSON and structured content", async () => {

@@ -4,7 +4,7 @@ import { z } from "zod";
 /**
  * Named workflow prompts. In hosts like Claude Code / Claude Desktop these show
  * up as slash commands, giving the user a one-step entry point that drives the
- * standard search_content → get_recipe flow. Titles and descriptions are
+ * standard search_recipes → get_recipe flow. Titles and descriptions are
  * bilingual (English + Chinese) because they are user-facing UI strings; bodies
  * are English for the model and end with an instruction to answer in the
  * language of the conversation, so the same prompt serves users of any language.
@@ -27,7 +27,7 @@ export function registerPrompts(server: McpServer): void {
     argsSchema: { dish: z.string().min(1).describe("Dish you want to cook, e.g. tiramisu, lasagne / 想做的菜名，如 提拉米苏") },
   }, ({ dish }) => userMessage(
     `I want to cook "${dish}". Please:\n` +
-    `1. Use the search_content tool to search GialloZafferano for "${dish}" — if the name is not in Italian or English, translate it first (e.g. 提拉米苏 → tiramisu).\n` +
+    `1. Use the search_recipes tool to search GialloZafferano for "${dish}" — if the name is not in Italian or English, translate it first (e.g. 提拉米苏 → tiramisu).\n` +
     `2. Pick the best match and call get_recipe with its sourceUrl.\n` +
     `3. Present the ingredient list, step-by-step instructions, prep/cook time, and servings, ending with the source URL.\n` +
     `If no good match exists, suggest close alternatives from the search results. ${RESPOND_IN_USER_LANGUAGE}`,
@@ -41,7 +41,7 @@ export function registerPrompts(server: McpServer): void {
     argsSchema: { ingredients: z.string().min(1).describe("Ingredients you have, comma-separated, e.g. zucchine, uova, parmigiano / 现有食材，逗号分隔") },
   }, ({ ingredients }) => userMessage(
     `I have these ingredients: ${ingredients}. Please:\n` +
-    `1. Use the search_content tool to find candidate GialloZafferano recipes for these ingredients, searched individually or combined — translate them into Italian or English first if needed.\n` +
+    `1. Use the search_recipes tool to find candidate GialloZafferano recipes for these ingredients, searched individually or combined — translate them into Italian or English first if needed.\n` +
     `2. Pick the 2-3 best fits and call get_recipe with each one's sourceUrl to check the full ingredient list.\n` +
     `3. Recommend which dishes to make first, list what I am still missing for each, and include each recipe's source URL.\n` +
     RESPOND_IN_USER_LANGUAGE,
@@ -57,7 +57,7 @@ export function registerPrompts(server: McpServer): void {
     const requirement = occasion?.trim() || "no special requirements — everyday home cooking is fine";
     return userMessage(
       `Help me plan an Italian menu (antipasto / primo / secondo / dolce, 1-2 dishes per course). Requirements: ${requirement}. Please:\n` +
-      `1. Use search_content to find candidates for each course (e.g. antipasti, primi, secondi, dolci, or specific dish names).\n` +
+      `1. Use search_recipes to find candidates for each course (e.g. antipasti, primi, secondi, dolci, or specific dish names).\n` +
       `2. Call get_recipe with each chosen dish's sourceUrl to get its ingredients and steps.\n` +
       `3. Present the full menu with each dish's source URL, plus one combined shopping list.\n` +
       RESPOND_IN_USER_LANGUAGE,

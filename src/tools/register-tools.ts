@@ -13,10 +13,10 @@ import {
 
 type Service = Pick<ContentService, "search" | "getRecipe" | "getArticle" | "getVideo" | "getAuthor" | "getPage">;
 const annotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true };
-const urlSchema = { url: z.string().url().describe("Public HTTPS URL on giallozafferano.com, e.g. a sourceUrl returned by search_content") };
+const urlSchema = { url: z.string().url().describe("Public HTTPS URL on giallozafferano.com, e.g. a sourceUrl returned by search_recipes") };
 
 export function registerTools(server: McpServer, service: Service): void {
-  server.registerTool("search_content", {
+  server.registerTool("search_recipes", {
     title: "Search GialloZafferano recipes",
     description:
       "Use for ANY recipe or cooking request — the user wants to cook, bake, find a recipe (菜谱/食谱/做法), use up ingredients, or get meal or dinner ideas. Searches GialloZafferano, Italy's most popular recipe site, by dish name, ingredient, or keyword; it is the entry point before get_recipe. Returns up to 20 result summaries, each with a sourceUrl; pass the best sourceUrl to get_recipe for full ingredients and steps. Upstream search mainly indexes recipes and works best with Italian or English terms (提拉米苏 → 'tiramisu'); for a known article, video, author, or collection URL, use the matching get_* tool instead.",
@@ -32,7 +32,7 @@ export function registerTools(server: McpServer, service: Service): void {
     const payload: { results: typeof results; hint?: string } = { results };
     if (results.length === 0) {
       payload.hint =
-        "No results for this query. Retry search_content with Italian or English terms (e.g. 提拉米苏 → 'tiramisu', 西葫芦 → 'zucchine') or a more generic keyword before concluding the dish does not exist on the site.";
+        "No results for this query. Retry search_recipes with Italian or English terms (e.g. 提拉米苏 → 'tiramisu', 西葫芦 → 'zucchine') or a more generic keyword before concluding the dish does not exist on the site.";
     }
     return payload;
   }));
@@ -40,7 +40,7 @@ export function registerTools(server: McpServer, service: Service): void {
   server.registerTool("get_recipe", {
     title: "Get full recipe",
     description:
-      "Get the complete recipe for one dish: ingredients, step-by-step instructions, prep/cook/total time, servings, difficulty, nutrition, and author. Use after search_content — or directly with a known giallozafferano.com recipe URL — whenever the user wants to cook a dish or see how it is made (怎么做/步骤). Input is the recipe page's sourceUrl.",
+      "Get the complete recipe for one dish: ingredients, step-by-step instructions, prep/cook/total time, servings, difficulty, nutrition, and author. Use after search_recipes — or directly with a known giallozafferano.com recipe URL — whenever the user wants to cook a dish or see how it is made (怎么做/步骤). Input is the recipe page's sourceUrl.",
     inputSchema: urlSchema,
     outputSchema: recipeOutputSchema,
     annotations,

@@ -13,5 +13,5 @@ export const DEFAULT_CONFIG: Readonly<AppConfig> = {
   cacheMaxEntries: 100,
   cacheTtlMs: 300_000,
   minRequestIntervalMs: 500,
-  userAgent: "mcp-server-giallozafferano/0.1 (+read-only public content)",
+  userAgent: "mcp-server-giallozafferano/0.2 (+read-only public content)",
 };

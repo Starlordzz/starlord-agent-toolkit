@@ -9,6 +9,9 @@ A read-only Model Context Protocol (MCP) server that searches and parses public 
 
 This project is not an official GialloZafferano product and has no affiliation, partnership, authorization, sponsorship, or endorsement relationship with GialloZafferano, its owners, affiliates, or content creators.
 
+> [!NOTE]
+> **Breaking change in 0.2.0**: the tool `search_content` was renamed to `search_recipes` (clearer trigger matching for agents). Update any client configuration, prompt, or automation that referenced the old name.
+
 ## AI Generation Statement
 
 This repository is an AI-assisted project:
@@ -23,7 +26,7 @@ See [AI-DISCLOSURE.md](./AI-DISCLOSURE.md) for the full disclosure, responsibili
 
 ## Features
 
-- `search_content`: search the site's public recipe index, optionally filtered by detected type, up to 20 results.
+- `search_recipes`: search the site's public recipe index, optionally filtered by detected type, up to 20 results.
 - `get_recipe`: read ingredients, step-by-step instructions, times, servings, nutrition, and author info.
 - `get_article`: read an article's body text, author, and publish date.
 - `get_video`: read video metadata without downloading any media.
@@ -36,9 +39,9 @@ The detail tools only accept public URLs on `https://giallozafferano.com` and it
 
 So that AI clients call the tools proactively and correctly when a user says something like "I want to cook X", the server also provides:
 
-- **Server instructions**: sent to the client at initialization, opening with an explicit trigger list (cooking, recipes, dishes, ingredients, meal planning, 菜谱/食谱/做法 — even when the user doesn't mention Italy) and telling the model to prefer these tools over answering from memory. They then describe the standard flow (`search_content` → take the best result's `sourceUrl` → `get_recipe` for the full recipe), to retry an empty search in Italian or English, and to present results in the user's own language.
+- **Server instructions**: sent to the client at initialization, opening with an explicit trigger list (cooking, recipes, dishes, ingredients, meal planning, 菜谱/食谱/做法 — even when the user doesn't mention Italy) and telling the model to prefer these tools over answering from memory. They then describe the standard flow (`search_recipes` → take the best result's `sourceUrl` → `get_recipe` for the full recipe), to retry an empty search in Italian or English, and to present results in the user's own language.
 - **Intent-first tool descriptions and `title`s**: every tool description opens with *when to use it* — including bilingual trigger keywords — before *what it returns*.
-- **Empty-search recovery hint**: when `search_content` returns zero results, the payload includes a `hint` telling the model to retry with Italian or English terms (e.g. 提拉米苏 → `tiramisu`) instead of giving up.
+- **Empty-search recovery hint**: when `search_recipes` returns zero results, the payload includes a `hint` telling the model to retry with Italian or English terms (e.g. 提拉米苏 → `tiramisu`) instead of giving up.
 - **Output schemas (`outputSchema`)**: every tool declares a JSON Schema for its structured output; successful results are validated server-side by the SDK. Error results (`isError`) return `{ error: { code, message, suggestion } }` and skip validation.
 
 ### Workflow Prompts (Slash Commands)
@@ -99,7 +102,7 @@ Windows example:
 
 ## Tool Parameters
 
-### `search_content`
+### `search_recipes`
 
 - `query`: non-empty search terms.
 - `content_type`: `all`, `recipe`, `article`, `video`, `author`, or `collection`; defaults to `all`.
@@ -134,7 +137,7 @@ If the site returns HTTP 403 or 429, the tests report the upstream restriction e
 - Page JavaScript is never executed, so content that requires dynamic rendering may not be parseable.
 - When a page's structure changes, tools return `PARSE_FAILED` or `TYPE_MISMATCH` together with the source link.
 - Search returns summaries only; detail content is fetched on demand.
-- The site's public search mainly indexes recipes. Articles, videos, authors, and collections can be read via their detail tools given a known URL, but are not guaranteed to be discoverable through `search_content`.
+- The site's public search mainly indexes recipes. Articles, videos, authors, and collections can be read via their detail tools given a known URL, but are not guaranteed to be discoverable through `search_recipes`.
 - Site content may change, disappear, be inaccurate, or become access-restricted at any time.
 
 ## Third-Party Rights & Compliance
