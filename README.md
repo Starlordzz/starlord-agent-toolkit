@@ -4,6 +4,27 @@
 
 ---
 
+## ⚠️ 重复造轮子声明
+
+本项目是一个典型的**重复造轮子**项目 —— 市面上已有许多更成熟、更完善的同类方案，如果没有特殊的自用需求，请优先使用它们：
+
+| 已有方案 | 说明 |
+| :--- | :--- |
+| [openatx/uiautomator2](https://github.com/openatx/uiautomator2) | 本项目底层依赖的 Python 库，单项目使用直接用它即可 |
+| [mobile-next/mobile-mcp](https://github.com/mobile-next/mobile-mcp) | 让 AI 客户端（Claude / Cursor 等）直接操控 Android / iOS 设备的 MCP Server |
+| [droidrun/droidrun](https://github.com/droidrun/droidrun) | LLM 驱动的 Android 自动化 Agent 框架 |
+| [Appium](https://github.com/appium/appium) | 老牌跨平台移动端自动化框架 |
+| [Maestro](https://github.com/mobile-dev-inc/maestro) | 简单易用的移动端 UI 测试框架 |
+
+本项目继续存在的理由只有两个：
+
+- **学习练手**：把 uiautomator2、MCP 协议、多语言 SDK 串起来完整跑通一遍；
+- **自用场景**：多个本地项目共享同一个「按需启动、空闲自退出」的自动化服务实例，并顺带暴露为 MCP 工具。
+
+不追求生产可用，不承诺持续维护。
+
+---
+
 ## 🤖 MCP Server（AI 客户端直连安卓设备）
 
 本项目内置 MCP Server（`mcp_server/`），把全部自动化能力（观察 / 点按 / 输入 / 截图 / SoM 视觉标注 / AI 自愈）暴露为 24 个 MCP 工具，可在 ZCode、Claude Desktop、Cursor 等 AI 客户端中直接操控安卓设备：
