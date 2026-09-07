@@ -1,15 +1,20 @@
 {
   "name": "mcp-server-giallozafferano",
   "version": "0.1.0",
-  "description": "Read-only MCP server that searches GialloZafferano.com and reads its public recipes, articles, videos, author profiles, and collection pages as structured data",
+  "description": "Read-only MCP server for recipes, cooking, and Italian food: searches GialloZafferano.com and reads its public recipes, articles, videos, author profiles, and collection pages as structured data",
   "keywords": [
     "mcp",
     "mcp-server",
     "model-context-protocol",
     "giallozafferano",
     "recipes",
+    "recipe-search",
     "italian-cuisine",
+    "italian-recipes",
+    "food",
     "cooking",
+    "cucina",
+    "ricette",
     "claude"
   ],
   "homepage": "https://github.com/Starlordzz/mcp-giallozafferano#readme",

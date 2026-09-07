@@ -36,8 +36,9 @@ The detail tools only accept public URLs on `https://giallozafferano.com` and it
 
 So that AI clients call the tools proactively and correctly when a user says something like "I want to cook X", the server also provides:
 
-- **Server instructions**: sent to the client at initialization, describing when to use the server and the standard flow (`search_content` → take the best result's `sourceUrl` → `get_recipe` for the full recipe). They also tell the model to translate dish names into Italian or English before searching and to present results in the user's own language.
-- **Intent-first tool descriptions and `title`s**: every tool description explains *when to use it* before *what it returns*.
+- **Server instructions**: sent to the client at initialization, opening with an explicit trigger list (cooking, recipes, dishes, ingredients, meal planning, 菜谱/食谱/做法 — even when the user doesn't mention Italy) and telling the model to prefer these tools over answering from memory. They then describe the standard flow (`search_content` → take the best result's `sourceUrl` → `get_recipe` for the full recipe), to retry an empty search in Italian or English, and to present results in the user's own language.
+- **Intent-first tool descriptions and `title`s**: every tool description opens with *when to use it* — including bilingual trigger keywords — before *what it returns*.
+- **Empty-search recovery hint**: when `search_content` returns zero results, the payload includes a `hint` telling the model to retry with Italian or English terms (e.g. 提拉米苏 → `tiramisu`) instead of giving up.
 - **Output schemas (`outputSchema`)**: every tool declares a JSON Schema for its structured output; successful results are validated server-side by the SDK. Error results (`isError`) return `{ error: { code, message, suggestion } }` and skip validation.
 
 ### Workflow Prompts (Slash Commands)

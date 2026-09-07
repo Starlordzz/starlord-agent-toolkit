@@ -27,6 +27,9 @@ const base = {
 
 export const searchOutputSchema = {
   results: z.array(searchResult),
+  // Present only when the search returned nothing, to steer the model toward
+  // retrying in Italian/English instead of giving up after one empty result.
+  hint: z.string().optional(),
 };
 
 export const recipeOutputSchema = {
