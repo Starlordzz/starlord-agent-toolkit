@@ -1,0 +1,21 @@
+# deps
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+
+# build output
+dist/
+build/
+
+# runtime / local state
+playwright-browsers/
+browser_data/
+backup_browser_data/
+data/
+*.log
+*.db*
+.env
+.DS_Store
+Thumbs.db
